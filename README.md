@@ -1,6 +1,6 @@
-## docker-tunnel
+# docker-tunnel
 
-### what is this
+## what is this
 
 Basically, this project implemented the following line of ssh tunnel
 
@@ -10,7 +10,7 @@ ssh -nNT -L /tmp/remoteHost.docker.sock:/var/run/docker.sock user@remoteHost
 
 It's main purpose is to call remote docker socket with a local stub.
 
-### build
+## build
 
 default make to adapt current platform
 
@@ -24,7 +24,7 @@ cross compile, to specify platform (eg: linux)
 make dockertunnel-os-linux
 ```
 
-### sample docker client code
+## sample docker client code
 
 ```
 func NewTunneledClient(remoteHost string) (*client.Client, error) {
@@ -40,7 +40,7 @@ func NewTunneledClient(remoteHost string) (*client.Client, error) {
 }
 ```
 
-### sample output
+## sample output
 
 ```
 $ make
@@ -52,3 +52,11 @@ $ build/bin/darwin/dockertunnel -h 10.0.0.10 -P 1122
 ^C2019/12/03 11:28:32 signal received, closing docker tunnel
 
 ```
+
+## Note
+
+This implementation only implemented docker unix socket tunnel
+
+## license
+
+apache 2.0
