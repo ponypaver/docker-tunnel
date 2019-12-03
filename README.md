@@ -8,7 +8,7 @@ Basically, this project implemented the following line of ssh tunnel
 ssh -nNT -L /tmp/remoteHost.docker.sock:/var/run/docker.sock user@remoteHost
 ```
 
-It's main purpose is to call remote docker socket with a local stub.
+ie, establish a docker call tunnel through ssh which enables to call remote docker socket with a local stub.
 
 ## Build
 
