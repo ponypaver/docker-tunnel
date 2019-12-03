@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"golang.org/x/crypto/ssh"
 	homedir "github.com/mitchellh/go-homedir"
+	"golang.org/x/crypto/ssh"
 )
 
 const (

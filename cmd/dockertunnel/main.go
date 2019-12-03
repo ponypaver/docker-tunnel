@@ -8,33 +8,33 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ponypaver/docker-tunnel/pkg/ssh"
 	"github.com/ponypaver/docker-tunnel/pkg/docker"
+	"github.com/ponypaver/docker-tunnel/pkg/ssh"
 )
 
 const (
-	defaultSSHUser = "root"
-	defaultSSHPort = 22
+	defaultSSHUser        = "root"
+	defaultSSHPort        = 22
 	defaultPrivateKeyPath = "~/.ssh/id_rsa"
 )
 
 var (
-	port int
-	user string
-	host string
-	password string
+	port           int
+	user           string
+	host           string
+	password       string
 	privateKeyPath string
 
-	shutdownHandler chan os.Signal
-    onlyOneSignalHandler = make(chan struct{})
-	shutdownSignals = []os.Signal{os.Interrupt, syscall.SIGTERM}
+	shutdownHandler      chan os.Signal
+	onlyOneSignalHandler = make(chan struct{})
+	shutdownSignals      = []os.Signal{os.Interrupt, syscall.SIGTERM}
 )
 
 func init() {
-	flag.IntVar(&port, "P", 	defaultSSHPort, "ssh port")
+	flag.IntVar(&port, "P", defaultSSHPort, "ssh port")
 	flag.StringVar(&host, "h", "", "remote hostname or ip")
-	flag.StringVar(&user, "u", 	defaultSSHUser, "ssh user to login to remote host")
-	flag.StringVar(&password, "p", 	"", "ssh password")
+	flag.StringVar(&user, "u", defaultSSHUser, "ssh user to login to remote host")
+	flag.StringVar(&password, "p", "", "ssh password")
 	flag.StringVar(&privateKeyPath, "i", defaultPrivateKeyPath, "ssh private key to use to create ssh tunnel")
 
 	flag.Parse()
@@ -50,7 +50,7 @@ func setupSignalHandler() <-chan struct{} {
 	shutdownHandler = make(chan os.Signal, 2)
 
 	stop := make(chan struct{})
-	signal.Notify(shutdownHandler, )
+	signal.Notify(shutdownHandler)
 	go func() {
 		<-shutdownHandler
 		close(stop)
