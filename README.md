@@ -21,7 +21,7 @@ $ make
 cross compile, to specify platform (eg: linux)
 
 ```
-make dockertunnel-os-linux
+$ make dockertunnel-os-linux
 ```
 
 ## Sample docker client code
