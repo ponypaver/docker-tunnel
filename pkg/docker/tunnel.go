@@ -28,7 +28,7 @@ func NewTunnel(sshClient *ssh.Client, host string) *Tunnel {
 		remoteHost:          host,
 		sshClient:           sshClient,
 		done:                make(chan struct{}),
-		localUnixSocketFile: composeLocalDockerSocketFile(host),
+		localUnixSocketFile: ComposeLocalDockerSocketFile(host),
 	}
 }
 
@@ -91,8 +91,8 @@ func (t *Tunnel) Close() (err error) {
 	return
 }
 
-func composeLocalDockerSocketFile(name string) string {
-	return localSocketDir + name + dockerSocketSuffix
+func ComposeLocalDockerSocketFile(remoteHost string) string {
+	return localSocketDir + remoteHost + dockerSocketSuffix
 }
 
 func fileExist(path string) bool {
