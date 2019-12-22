@@ -78,7 +78,7 @@ func (t *Tunnel) forward(dst, src net.Conn) {
 	go mustCopy(src, dst)
 	go mustCopy(dst, src)
 
-	<- t.done
+	<-t.done
 	log.Println("forward done")
 }
 

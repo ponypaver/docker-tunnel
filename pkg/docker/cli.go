@@ -8,15 +8,17 @@ import (
 	"github.com/docker/docker/client"
 )
 
+const (
+	defaultScheme = "unix://"
+)
+
 func NewTunneledClient(remoteHost string) (*client.Client, error) {
 	localDockerSocketFile := composeLocalDockerSocketFile(remoteHost)
+	localDockerAdder := defaultScheme + localDockerSocketFile
 
 	cli, err := client.NewClientWithOpts(
-		client.WithHost("unix://"+localDockerSocketFile),
+		client.WithHost(localDockerAdder),
 	)
-
-	//cli, err := client.NewClient("unix://"+localDockerSocketFile)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to create docker client, error: %v", err)
 	}
