@@ -9,8 +9,15 @@ OUTBIN_DIR := ${OUT_DIR}/bin
 SRC_PREFIX := github.com/ponypaver/docker-tunnel/cmd
 PKG_PREFIX := github.com/ponypaver/docker-tunnel/pkg
 
-ALL_TARGETS := dockertunnel
+ALL_TARGETS := dockertunnel cli
 ALL_TARGETS_WITH_OS := $(addsuffix -os-%,$(ALL_TARGETS))
+
+all: $(ALL_TARGETS)
+
+# cross compile all targets
+# eg: make all-os-linux
+all-os-%:
+	@$(MAKE) OS=$* all
 
 # compile with default platform options
 # eg: make

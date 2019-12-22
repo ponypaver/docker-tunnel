@@ -50,7 +50,7 @@ func setupSignalHandler() <-chan struct{} {
 	shutdownHandler = make(chan os.Signal, 2)
 
 	stop := make(chan struct{})
-	signal.Notify(shutdownHandler)
+	signal.Notify(shutdownHandler, shutdownSignals...)
 	go func() {
 		<-shutdownHandler
 		close(stop)

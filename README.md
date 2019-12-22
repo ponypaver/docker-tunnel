@@ -27,17 +27,7 @@ $ make dockertunnel-os-linux
 ## Sample docker client code
 
 ```
-func NewTunneledClient(remoteHost string) (*client.Client, error) {
-	localDockerSocketFile := docker.ComposeLocalDockerSocketFile(remoteHost)
-	opt := client.WithHost(localDockerSocketFile)
-
-	cli, err := client.NewClientWithOpts(opt)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create docker client, error: %v", err)
-	}
-
-	return cli, nil
-}
+there is a sample client demo at /cmd/cli
 ```
 
 ## Sample output

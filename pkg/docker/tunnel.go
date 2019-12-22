@@ -2,7 +2,6 @@ package docker
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net"
 	"os"
@@ -28,14 +27,15 @@ func NewTunnel(sshClient *ssh.Client, host string) *Tunnel {
 		remoteHost:          host,
 		sshClient:           sshClient,
 		done:                make(chan struct{}),
-		localUnixSocketFile: ComposeLocalDockerSocketFile(host),
+		localUnixSocketFile: composeLocalDockerSocketFile(host),
 	}
 }
 
 func (t *Tunnel) Start() (err error) {
 	listener, err := net.Listen("unix", t.localUnixSocketFile)
 	if err != nil {
-		return fmt.Errorf("failed to listen local docker, error: %v", err)
+		err = fmt.Errorf("failed to listen local docker, error: %v", err)
+		return
 	}
 
 	log.Printf("docker tunnel to %v:%v started at localhost:%v", t.remoteHost, remoteDockerSocket, t.localUnixSocketFile)
@@ -48,9 +48,9 @@ func (t *Tunnel) Start() (err error) {
 
 		}
 
-		localConn, err := listener.Accept()
+		localConn, acceptErr := listener.Accept()
 		if err != nil {
-			log.Printf("failed to accept local connection, error: %v", err)
+			log.Printf("failed to accept local connection, error: %v", acceptErr)
 			continue
 		}
 
@@ -70,13 +70,16 @@ func (t *Tunnel) Start() (err error) {
 
 func (t *Tunnel) forward(dst, src net.Conn) {
 	defer func() {
-		dst.Close()
 		src.Close()
+		dst.Close()
 		log.Printf("request from localhost:%v to %v:%v done", src.LocalAddr(), t.remoteHost, dst.RemoteAddr())
 	}()
 
 	go mustCopy(src, dst)
-	mustCopy(dst, src)
+	go mustCopy(dst, src)
+
+	<- t.done
+	log.Println("forward done")
 }
 
 func (t *Tunnel) Close() (err error) {
@@ -89,21 +92,4 @@ func (t *Tunnel) Close() (err error) {
 	}
 
 	return
-}
-
-func ComposeLocalDockerSocketFile(remoteHost string) string {
-	return localSocketDir + remoteHost + dockerSocketSuffix
-}
-
-func fileExist(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return false
-	}
-	return true
-}
-
-func mustCopy(dst io.Writer, src io.Reader) {
-	if _, err := io.Copy(dst, src); err != nil {
-		panic(err)
-	}
 }
