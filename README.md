@@ -45,7 +45,9 @@ $ build/bin/darwin/dockertunnel -h 10.0.0.10 -P 1122
 
 ## Note
 
-This implementation only implemented docker unix socket tunnel
+- This implementation only implemented docker unix socket tunnel
+- This implementation only test on Ubuntu 16.04
+- This can not work on CentOs/Rhel 7 release for known [bug](https://bugzilla.redhat.com/show_bug.cgi?id=1527565)
 
 ## License
 
